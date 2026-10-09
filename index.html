@@ -140,8 +140,6 @@ body.paged .back{display:block}
 .mp-stage iframe{border:0;background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
 .mp-stage iframe.yt{width:min(100%,calc((100vh - 170px)*16/9));aspect-ratio:16/9}
 .mp-stage iframe.ig{height:100%;width:min(100%,420px);background:#fff}
-.mp-stage .drop{position:absolute;inset:12px;border:2px dashed var(--acc);display:none;align-items:center;justify-content:center;letter-spacing:.2em;background:rgba(0,0,0,.7)}
-.mp.drag .drop{display:flex}
 .mp-nav{position:absolute;top:50%;margin-top:-26px;width:44px;height:52px;font:inherit;font-size:28px;line-height:1;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.6);cursor:pointer;z-index:2}
 .mp-nav:hover,.mp-nav:focus-visible{border-color:var(--acc);color:var(--acc);outline:none}
 .mp-nav.prev{left:1.5vw}.mp-nav.next{right:1.5vw}
@@ -240,8 +238,7 @@ function mpRender(m,title,tag,count){
   else if(m.k==='img'){el=document.createElement('img');el.src=m.src;el.alt=title||''}
   else if(m.k==='yt'){el=document.createElement('iframe');el.className='yt';el.src='https://www.youtube.com/embed/'+m.src+'?autoplay=1&rel=0';el.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';el.allowFullscreen=true}
   else if(m.k==='ig'){el=document.createElement('iframe');el.className='ig';el.src='https://www.instagram.com/reel/'+m.src+'/embed';el.scrolling='no';el.allowFullscreen=true}
-  var d=document.createElement('div');d.className='drop';d.textContent='DROP TO PLAY';
-  mpStage.appendChild(el);mpStage.appendChild(d);
+  mpStage.appendChild(el);
   mp.querySelector('#mpTitle').textContent=title||'';mp.querySelector('#mpTag').textContent=tag||'';mp.querySelector('#mpCount').textContent=count||'';
 }
 function mpOpen(i){

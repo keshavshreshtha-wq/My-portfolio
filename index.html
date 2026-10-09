@@ -229,7 +229,7 @@ function media(c){
 }
 /* ---- player ---- */
 var mp=document.createElement('div');mp.className='mp';mp.id='mp';mp.setAttribute('role','dialog');mp.setAttribute('aria-label','Media player');
-mp.innerHTML='<div class="mp-bar"><span class="tag" id="mpTag"></span><span class="t" id="mpTitle"></span><span id="mpCount"></span><label class="mp-btn" tabindex="0" id="mpOpen">OPEN FILE<input type="file" id="mpFile" accept="video/*,image/*,audio/*" hidden></label><button type="button" class="mp-btn" id="mpClose">✕ CLOSE</button></div><div class="mp-stage" id="mpStage"></div><button type="button" class="mp-nav prev" id="mpPrev" aria-label="Previous">‹</button><button type="button" class="mp-nav next" id="mpNext" aria-label="Next">›</button><div class="mp-foot">← → SWITCH · ESC CLOSE · DROP A FILE HERE TO PLAY IT</div>';
+mp.innerHTML='<button type="button" class="mp-btn" id="mpClose">✕ CLOSE</button></div><div class="mp-stage" id="mpStage"></div><button type="button" class="mp-nav prev" id="mpPrev" aria-label="Previous">‹</button><button type="button" class="mp-nav next" id="mpNext" aria-label="Next">›</button><div class="mp-foot">← → SWITCH · ESC CLOSE · DROP A FILE HERE TO PLAY IT</div>';
 document.body.appendChild(mp);
 var mpStage=mp.querySelector('#mpStage'),mpIdx=-1,mpUrl=null;
 function mpClear(){mpStage.innerHTML='';if(mpUrl){URL.revokeObjectURL(mpUrl);mpUrl=null}}
@@ -252,20 +252,9 @@ function mpOpen(i){
 }
 function mpStep(d){if(MEDIA.length<2)return;mpOpen((mpIdx+d+MEDIA.length)%MEDIA.length)}
 function mpClose(){mp.classList.remove('on','drag');mpClear();var t=page.querySelector('.thumb[data-m="'+mpIdx+'"]');if(t)t.focus()}
-function mpLocal(f){
-  if(!f)return;var k=f.type.indexOf('image')===0?'img':f.type.indexOf('audio')===0?'a':f.type.indexOf('video')===0?'v':null;
-  if(!k){alert('That file type can\'t be previewed. Use a video, image or audio file.');return}
-  var u=URL.createObjectURL(f);mpRender({k:k,src:u},f.name,'LOCAL FILE','');mpUrl=u;
-  mp.querySelector('#mpPrev').disabled=true;mp.querySelector('#mpNext').disabled=true;mp.classList.add('on');
-}
 mp.querySelector('#mpClose').onclick=mpClose;
 mp.querySelector('#mpPrev').onclick=function(){mpStep(-1)};
 mp.querySelector('#mpNext').onclick=function(){mpStep(1)};
-mp.querySelector('#mpFile').onchange=function(){mpLocal(this.files[0]);this.value=''};
-mp.querySelector('#mpOpen').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();mp.querySelector('#mpFile').click()}};
-['dragenter','dragover'].forEach(function(n){mp.addEventListener(n,function(e){e.preventDefault();mp.classList.add('drag')})});
-mp.addEventListener('dragleave',function(e){if(e.target===mp||e.target.classList.contains('drop'))mp.classList.remove('drag')});
-mp.addEventListener('drop',function(e){e.preventDefault();mp.classList.remove('drag');mpLocal(e.dataTransfer.files[0])});
 mpStage.addEventListener('click',function(e){if(e.target===mpStage)mpClose()});
 addEventListener('keydown',function(e){
   if(!mp.classList.contains('on'))return;
